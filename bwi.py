@@ -4,23 +4,17 @@ import csv
 transporter_1 = 1100000 - 72400
 transporter_2 = 1100000 - 85700
 
-""" Convert the data from from the csv file
-While we do so, we calculate the "best_value" as well. This value will indicate the valuepoints per gram and will be useful later on
-"""
-requirements = []
-with open('nutzlast.csv') as csvfile:
-     reader = csv.DictReader(csvfile)
-     for row in reader:
-         requirements.append({
-             'name': row['Hardware'],
-             'required': int(row['benötigte Anzahl Einheiten in Bonn']),
-             'weight': int(row['Gewicht (mit Verpackung und Zubehör) in g'].replace('.', '')),
-             'value': int(row['Nutzwert je Hardware-Einheit (hoch=besser)']),
-             'best_value': float(row['Nutzwert je Hardware-Einheit (hoch=besser)']) / int(row['Gewicht (mit Verpackung und Zubehör) in g'].replace('.', ''))
-         })
-
-# To optimize the search tree, we sort the items with the one with the best value per gram leading the list
-requirements = sorted(requirements, key=lambda requirement: requirement['best_value'], reverse=True)
+# Hard coded requiremnts
+requirements = [{'name': 'Mobiltelefon Outdoor', 'required': 157, 'weight': 988, 'value': 60, 'best_value': 0.06072874493927125},
+{'name': 'Mobiltelefon Heavy Duty', 'required': 220, 'weight': 1220, 'value': 65, 'best_value': 0.05327868852459016},
+{'name': 'Mobiltelefon Büro', 'required': 60, 'weight': 717, 'value': 30, 'best_value': 0.04184100418410042},
+{'name': 'Tablet outdoor groß', 'required': 370, 'weight': 1980, 'value': 68, 'best_value': 0.03434343434343434},
+{'name': 'Tablet Büro klein', 'required': 620, 'weight': 1405, 'value': 40, 'best_value': 0.028469750889679714},
+{'name': 'Tablet Büro groß', 'required': 250, 'weight': 1455, 'value': 40, 'best_value': 0.027491408934707903},
+{'name': 'Tablet outdoor klein', 'required': 540, 'weight': 1690, 'value': 45, 'best_value': 0.026627218934911243},
+{'name': 'Notebook outdoor', 'required': 450, 'weight': 3625, 'value': 80, 'best_value': 0.022068965517241378},
+{'name': 'Notebook Büro 13"', 'required': 205, 'weight': 2451, 'value': 40, 'best_value': 0.016319869441044473},
+{'name': 'Notebook Büro 14"', 'required': 420, 'weight': 2978, 'value': 35, 'best_value': 0.01175285426460712}]
 
 # We start out with a high score of zero to initialize the program
 highscore = 0
