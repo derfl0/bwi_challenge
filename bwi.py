@@ -1,23 +1,23 @@
 import csv
 
 # Initialize our 2 transporters
-transporter_1 = 1100000 - 72400
-transporter_2 = 1100000 - 85700
+TRANSPORTER_1 = 1100000 - 72400
+TRANSPORTER_2 = 1100000 - 85700
 
 """ Convert the data from from the csv file
 While we do so, we calculate the "best_value" as well. This value will indicate the valuepoints per gram and will be useful later on
 """
 requirements = []
 with open('nutzlast.csv') as csvfile:
-     reader = csv.DictReader(csvfile)
-     for row in reader:
-         requirements.append({
-             'name': row['Hardware'],
-             'required': int(row['benötigte Anzahl Einheiten in Bonn']),
-             'weight': int(row['Gewicht (mit Verpackung und Zubehör) in g'].replace('.', '')),
-             'value': int(row['Nutzwert je Hardware-Einheit (hoch=besser)']),
-             'best_value': float(row['Nutzwert je Hardware-Einheit (hoch=besser)']) / int(row['Gewicht (mit Verpackung und Zubehör) in g'].replace('.', ''))
-         })
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        requirements.append({
+            'name': row['Hardware'],
+            'required': int(row['benötigte Anzahl Einheiten in Bonn']),
+            'weight': int(row['Gewicht (mit Verpackung und Zubehör) in g'].replace('.', '')),
+            'value': int(row['Nutzwert je Hardware-Einheit (hoch=besser)']),
+            'best_value': float(row['Nutzwert je Hardware-Einheit (hoch=besser)']) / int(row['Gewicht (mit Verpackung und Zubehör) in g'].replace('.', ''))
+        })
 
 # To optimize the search tree, we sort the items with the one with the best value per gram leading the list
 requirements = sorted(requirements, key=lambda requirement: requirement['best_value'], reverse=True)
@@ -29,9 +29,10 @@ highscore = 0
 single_highscore = 0
 
 # The combination storage is global to avoid many list mutations which cost us an enourmous amount of time
-combination = [[0,0] for x in requirements]
+combination = [[0, 0] for x in requirements]
 
-def fill_transporter(remaining_space_1, remaining_space_2, item_index = 0, current_score = 0):
+
+def fill_transporter(remaining_space_1, remaining_space_2, item_index=0, current_score=0):
     '''
     This is our tree function which fills the transporter recursivly for each iteration it knows the remaining space in each transporter,
     the index of the item next to place and the current score that was achieved with previous items
@@ -52,7 +53,7 @@ def fill_transporter(remaining_space_1, remaining_space_2, item_index = 0, curre
             print("Remaining Space: ", remaining_space_1 + remaining_space_2)
             print("-"*30)
             for index, item in enumerate(combination):
-                print(requirements[index]['name'], "\t",item[0], "\t",item[1])
+                print(requirements[index]['name'], "\t", item[0], "\t", item[1])
             print()
 
             # Check if the score is the final highscore, comment this out if you want more than one solution
@@ -82,13 +83,13 @@ def fill_transporter(remaining_space_1, remaining_space_2, item_index = 0, curre
     max_items_total = min(max_items_in_transporter_1, current_item['required'])
 
     # This loop will create every possible amount of items for the current branch
-    for items_in_transporter_1 in range(max_items_total, -1 , -1):
+    for items_in_transporter_1 in range(max_items_total, -1, -1):
 
         # For transporter 2 we do only need the rest of the items, that was not already put into transporter 1 and also not more than there is space available
         max_available_items_in_transporter_2 = min(max_items_in_transporter_2, current_item['required'] - items_in_transporter_1)
 
         # Create every possible amount of the current item in transporter 2
-        for items_in_transporter_2 in range(max_available_items_in_transporter_2, -1 , -1):
+        for items_in_transporter_2 in range(max_available_items_in_transporter_2, -1, -1):
 
             # Compute remaining space in transporters
             current_remaining_space_transporter_1 = remaining_space_1 - items_in_transporter_1 * current_item['weight']
@@ -105,9 +106,10 @@ def fill_transporter(remaining_space_1, remaining_space_2, item_index = 0, curre
             if fill_transporter(current_remaining_space_transporter_1, current_remaining_space_transporter_2, item_index + 1, new_score):
                 return True
 
-def fill_single_transporter(remaining_space_1, item_index = 0, current_score = 0):
+
+def fill_single_transporter(remaining_space_1, item_index=0, current_score=0):
     '''
-    This function will fill a single transporter and store the highest possible score in the global single_highscore 
+    This function will fill a single transporter and store the highest possible score in the global single_highscore
     '''
     global single_highscore
 
@@ -128,7 +130,7 @@ def fill_single_transporter(remaining_space_1, item_index = 0, current_score = 0
     # Same code as in fill transporter with the code for the second transporter removed
     max_items_in_transporter_1 = remaining_space_1 // current_item['weight']
     max_items_total = min(max_items_in_transporter_1, current_item['required'])
-    for items_in_transporter_1 in range(max_items_total, -1 , -1):
+    for items_in_transporter_1 in range(max_items_total, -1, -1):
         current_remaining_space_transporter_1 = remaining_space_1 - items_in_transporter_1 * current_item['weight']
         new_score = current_score + items_in_transporter_1 * current_item['value']
 
@@ -136,11 +138,12 @@ def fill_single_transporter(remaining_space_1, item_index = 0, current_score = 0
         if fill_single_transporter(current_remaining_space_transporter_1, item_index + 1, new_score):
             break
 
+
 # Start the tree search
-fill_single_transporter(transporter_1 + transporter_2)
+fill_single_transporter(TRANSPORTER_1 + TRANSPORTER_2)
 
 # Start full search
-if fill_transporter(transporter_1, transporter_2):
+if fill_transporter(TRANSPORTER_1, TRANSPORTER_2):
     print("Highest possible score was achived.")
 else:
     print("Full tree search finished.")
