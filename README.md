@@ -1,10 +1,10 @@
 # Code für die BWI Challenge
 Dies ist meine Lösung für die BWI Coding Challenge https://www.get-in-it.de/coding-challenge
 
-Ausführung des Codes mittels: python bwi.py
+Ausführung des Codes mittels: python3 bwi.py
 
 Der Code wurde getestet mit:
-- Python 2.7.16
+- Python 2.7.16 (Bei Problemen mit Unicode # -*- coding: utf-8 -*- in bwi.py voranstellen)
 - Python 3.7.3
 - Python 3.9.1
 
@@ -88,11 +88,11 @@ nohup python3 -u bwi.py> out.txt &
 This is my entry for the BWI Coding Challenge https://www.get-in-it.de/coding-challenge
 
 The code was tested for
-- Python 2.7.16
+- Python 2.7.16 (When encountering problems with unicode use # -*- coding: utf-8 -*- at the top of the file)
 - Python 3.7.3
 - Python 3.9.1
 
-Execute code: python bwi.py
+Execute code: python3 bwi.py
 
 When you run into trouble with the csv reader checkout the "fallback" branch with a hardcoding of the requirements.
 
