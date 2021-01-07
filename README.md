@@ -8,6 +8,8 @@ Der Code wurde getestet mit:
 - Python 3.7.3
 - Python 3.9.1
 
+Bei Problemen mit dem CSV Reader kann der Branch "fallback" mit einer Hardcodierung verwendet werden.
+
 **English version below**
 
 ## Algorithmus
@@ -91,6 +93,8 @@ The code was tested for
 - Python 3.9.1
 
 Execute code: python bwi.py
+
+When you run into trouble with the csv reader checkout the "fallback" branch with a hardcoding of the requirements.
 
 ## Prerequisites
 Since in our case volume does not matter but weight does, when talking about available remaining weight the term "space" will be used.
