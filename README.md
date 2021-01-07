@@ -47,12 +47,12 @@ Angenommen, wir können 1.000.000 Knoten pro Sekunde überprüfen, müssten wir 
 ## Optimierungen
 
 ### Obere Grenze
-Je weiter unten im Baum bleibt im Transporter weniger Platz, bis nicht mehr alle Gegenstände der aktuellen Ebene in den Transporter platziert werden können. Daher berechnen wir die maximale Anzahl von Gegenständen, die in jeden Transporter passen, und nehmen das Minimum an **erforderlich und passend**, um die Schleife zu initiieren. (Siehe Codezeile 80-84)
+Je weiter unten im Baum bleibt im Transporter weniger Platz, bis nicht mehr alle Gegenstände der aktuellen Ebene in den Transporter platziert werden können. Daher berechnen wir die maximale Anzahl von Gegenständen, die in jeden Transporter passen, und nehmen das Minimum an **erforderlich und passend**, um die Schleife zu initiieren. (Siehe Codezeile 83 - 87)
 
 Da wir ungefähr 6,7 Tonnen Hardware haben, aber nur 2,0 Tonnen Last, spart dies eine Menge Knoten bereits ein.
 
 ### Potentiell verbleibende Punktzahl
-Vor dem starten des Suchbaums stellen wir sicher, dass die Ebenen vom höchsten Wert pro Gramm zum niedrigsten geordnet sind (Codezeile 23). An jedem Knoten im Baum erreicht die potenzielle Punktzahl aller Knoten darunter einen Spitzenwert von **insgesamt verfügbarem Restplatz in Gramm * Wert pro Gramm der aktuellen Ebene**. Wenn die Summe des verfügbaren Werts in beiden Transportern und der potenziellen Punktzahl niedriger als der aktuelle Highscore ist, gibt es keine Möglichkeit, dass bei einer Kombination im Baum darunter ein neuer Highscore entsteht. Die Berechnung wird in einer höheren Ebene fortgesetzt. (Codezeile 74)
+Vor dem starten des Suchbaums stellen wir sicher, dass die Ebenen vom höchsten Wert pro Gramm zum niedrigsten geordnet sind (Codezeile 27). An jedem Knoten im Baum erreicht die potenzielle Punktzahl aller Knoten darunter einen Spitzenwert von **insgesamt verfügbarem Restplatz in Gramm * Wert pro Gramm der aktuellen Ebene**. Wenn die Summe des verfügbaren Werts in beiden Transportern und der potenziellen Punktzahl niedriger als der aktuelle Highscore ist, gibt es keine Möglichkeit, dass bei einer Kombination im Baum darunter ein neuer Highscore entsteht. Die Berechnung wird in einer höheren Ebene fortgesetzt. (Codezeile 79)
 
 ### Abbruchkriterium absoluter Highscore
 Da wir bis zum erreichen des Endes des Suchbaums nie mit Sicherheit sagen können, ob noch eine effizientere Möglichkeit gefunden werden kann, können wir als Abbruchkriterium einen theoretischen Highscore berechnen, der erreichbar wäre, wenn die gesamte Kapazität in einem einzigen Transporter zur Verfügung stehen würde. Dies wird über die Funktion fill_single_transporter berechnet. Wird der dabei erzielte Highscore im Suchbaum erreicht, kann die Suche beendet werden, da ein höherer Nutzwert nicht mehr erreichbar ist.
@@ -135,12 +135,12 @@ Assuming we can check 1,000,000 Nodes per second we'd have to calculate about 2.
 ## Optimizations
 
 ### Upper boundary
-When progressing down the tree there will be a smaller amount of space left in the transporter up until the point, where not all items of the current layer can be put in a transporter. Therefore we calculate the maximum amount of items that fit in each transporter and take the minimum of **required and fitting** to initiate the loop. (See code line 80 - 84 )
+When progressing down the tree there will be a smaller amount of space left in the transporter up until the point, where not all items of the current layer can be put in a transporter. Therefore we calculate the maximum amount of items that fit in each transporter and take the minimum of **required and fitting** to initiate the loop. (See code line 83 - 87 )
 
 Since we have about 6.7 tons of items but only 2.0 tons of space this will save a ton of computation (pun intended).
 
 ### Potential remaining score
-Before building the search tree, we make sure, that the layers are ordered from the highest value per gram to lowest. (Code Line 23) So at any node in the tree, the potential score of all nodes below peaks at **total available space in gram * value per gram**. If the sum of the available value in both transporters and the potential score is lower than the actual highscore, there is no way that with any combination in the tree below there will be a new highscore and the node is abandoned. (Code Line 74)
+Before building the search tree, we make sure, that the layers are ordered from the highest value per gram to lowest. (Code Line 27) So at any node in the tree, the potential score of all nodes below peaks at **total available space in gram * value per gram**. If the sum of the available value in both transporters and the potential score is lower than the actual highscore, there is no way that with any combination in the tree below there will be a new highscore and the node is abandoned. (Code Line 79)
 
 ### Abort criterion absolute high score
 Since we can never say with certainty whether a more efficient option can be found until the end of the search tree is reached, we can calculate a theoretical high score as a termination criterion that would be achievable if the entire capacity were available in a single transporter. This is calculated using the fill_single_transporter function. If the resulting high score is reached in the search tree, the search can be ended, since a higher utility value can no longer be achieved.

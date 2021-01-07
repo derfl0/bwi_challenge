@@ -1,3 +1,7 @@
+"""
+This module is a solution for the BWI Coding Challenge https://www.get-in-it.de/coding-challenge
+"""
+
 import csv
 
 # Initialize our 2 transporters
@@ -23,10 +27,10 @@ with open('nutzlast.csv') as csvfile:
 requirements = sorted(requirements, key=lambda requirement: requirement['best_value'], reverse=True)
 
 # We start out with a high score of zero to initialize the program
-highscore = 0
+HIGHSCORE = 0
 
 # This is the highscore if we'd had a single transporter with the capacity of both
-single_highscore = 0
+SINGLE_HIGHSCORE = 0
 
 # The combination storage is global to avoid many list mutations which cost us an enourmous amount of time
 combination = [[0, 0] for x in requirements]
@@ -37,19 +41,19 @@ def fill_transporter(remaining_space_1, remaining_space_2, item_index=0, current
     This is our tree function which fills the transporter recursivly for each iteration it knows the remaining space in each transporter,
     the index of the item next to place and the current score that was achieved with previous items
     '''
-    global highscore, single_highscore
+    global HIGHSCORE, SINGLE_HIGHSCORE
 
     # if we're done with all available types of items, it is about to check our new score
     if item_index >= len(requirements):
 
-        '''
+        """
         If we achieved a new highscore, print out some information about it
         change current_score > highscore to current_score >= highscore if you want to see more than one solution
-        '''
-        if current_score > highscore:
-            highscore = current_score
+        """
+        if current_score > HIGHSCORE:
+            HIGHSCORE = current_score
             print("="*30)
-            print("Total Score: ", highscore)
+            print("Total Score: ", HIGHSCORE)
             print("Remaining Space: ", remaining_space_1 + remaining_space_2)
             print("-"*30)
             for index, item in enumerate(combination):
@@ -57,9 +61,9 @@ def fill_transporter(remaining_space_1, remaining_space_2, item_index=0, current
             print()
 
             # Check if the score is the final highscore, comment this out if you want more than one solution
-            if current_score >= single_highscore:
+            if current_score >= SINGLE_HIGHSCORE:
                 return True
-        return
+        return False
 
     # Check out the current item of the search tree
     current_item = requirements[item_index]
@@ -72,8 +76,8 @@ def fill_transporter(remaining_space_1, remaining_space_2, item_index=0, current
 
     If that value is lower than the required score for a new highscore, we can skip this branch
     '''
-    if (remaining_space_1 + remaining_space_2) * current_item['best_value'] < highscore - current_score:
-        return
+    if (remaining_space_1 + remaining_space_2) * current_item['best_value'] < HIGHSCORE - current_score:
+        return False
 
     # Now we check the upper boundry of this iteration. We can only fit as much items into the transporter as there is space remaining
     max_items_in_transporter_1 = remaining_space_1 // current_item['weight']
@@ -105,26 +109,27 @@ def fill_transporter(remaining_space_1, remaining_space_2, item_index=0, current
             # Continue with the next item. If the highest score was found, propagate that back to the root
             if fill_transporter(current_remaining_space_transporter_1, current_remaining_space_transporter_2, item_index + 1, new_score):
                 return True
+    return False
 
 
 def fill_single_transporter(remaining_space_1, item_index=0, current_score=0):
     '''
     This function will fill a single transporter and store the highest possible score in the global single_highscore
     '''
-    global single_highscore
+    global SINGLE_HIGHSCORE
 
     # Same code as in fill transporter without the print of highscores
     if item_index >= len(requirements):
-        if current_score >= single_highscore:
-            single_highscore = current_score
-        return
+        if current_score >= SINGLE_HIGHSCORE:
+            SINGLE_HIGHSCORE = current_score
+        return False
     current_item = requirements[item_index]
 
     '''
     Here we take a shortcut: if at one layer it is technically not possible anymore to achieve a higher score,
     it makes no sense to decrease the number of higher valued items
     '''
-    if (remaining_space_1) * current_item['best_value'] < single_highscore - current_score:
+    if (remaining_space_1) * current_item['best_value'] < SINGLE_HIGHSCORE - current_score:
         return True
 
     # Same code as in fill transporter with the code for the second transporter removed
@@ -137,6 +142,7 @@ def fill_single_transporter(remaining_space_1, item_index=0, current_score=0):
         # Here the shortcut will stop the decrease on the layer and continue one layer above
         if fill_single_transporter(current_remaining_space_transporter_1, item_index + 1, new_score):
             break
+    return False
 
 
 # Start the tree search
