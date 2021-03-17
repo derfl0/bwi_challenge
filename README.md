@@ -1,3 +1,7 @@
+# Mein Feedback zur Challenge
+
+https://github.com/derfl0/bwi_challenge/blob/main/feedback.md
+
 # Code für die BWI Challenge
 Dies ist meine Lösung für die BWI Coding Challenge https://www.get-in-it.de/coding-challenge
 
